@@ -8,6 +8,16 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx"
-  }
+    "jsx": "preserve",
+    "noEmit": true,
+    "incremental": true,
+    "strict": false
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": ["node_modules"]
 }
