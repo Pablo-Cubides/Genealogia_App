@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hombre rubio -->
+  <circle cx="32" cy="32" r="30" fill="#98FB98" stroke="#32CD32" stroke-width="2"/>
+  <!-- Cabello rubio -->
+  <path d="M19 19 Q32 11 45 19 Q41 7 32 7 Q23 7 19 19" fill="#FFD700"/>
+  <!-- Cara -->
+  <circle cx="32" cy="29" r="18" fill="#FDBCB4"/>
+  <!-- Ojos -->
+  <circle cx="27" cy="25" r="2" fill="#87CEEB"/>
+  <circle cx="37" cy="25" r="2" fill="#87CEEB"/>
+  <!-- Nariz -->
+  <line x1="32" y1="27" x2="32" y2="31" stroke="#E07A2C" stroke-width="1"/>
+  <!-- Boca sonriente -->
+  <path d="M27 35 Q32 39 37 35" stroke="#333" stroke-width="2" fill="none"/>
+</svg>

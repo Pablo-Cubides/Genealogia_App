@@ -1,0 +1,19 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mujer mayor -->
+  <circle cx="32" cy="32" r="30" fill="#F0E68C" stroke="#DAA520" stroke-width="2"/>
+  <!-- Cabello gris recogido -->
+  <path d="M22 20 Q32 12 42 20 Q40 16 38 18 Q32 16 26 18 Q24 16 22 20" fill="#C0C0C0"/>
+  <circle cx="32" cy="18" r="4" fill="#C0C0C0"/> <!-- Moño -->
+  <!-- Cara -->
+  <circle cx="32" cy="30" r="16" fill="#FDBCB4"/>
+  <!-- Ojos -->
+  <circle cx="28" cy="26" r="2" fill="#333"/>
+  <circle cx="36" cy="26" r="2" fill="#333"/>
+  <!-- Arrugas -->
+  <path d="M24 30 Q26 32 28 30" stroke="#E07A2C" stroke-width="0.5" fill="none"/>
+  <path d="M36 30 Q38 32 40 30" stroke="#E07A2C" stroke-width="0.5" fill="none"/>
+  <!-- Nariz -->
+  <line x1="32" y1="28" x2="32" y2="31" stroke="#E07A2C" stroke-width="0.5"/>
+  <!-- Labios -->
+  <ellipse cx="32" cy="35" rx="2.5" ry="1" fill="#CD5C5C"/>
+</svg>

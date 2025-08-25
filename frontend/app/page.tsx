@@ -166,10 +166,10 @@ export default function Page(){
 
   const presetAvatars: Record<string,string[]> = {
     M: [
-      '/presets/m1.png','/presets/m2.png','/presets/m3.png','/presets/m4.png','/presets/m5.png'
+      '/presets/m1.svg','/presets/m2.svg','/presets/m3.svg','/presets/m4.svg','/presets/m5.svg'
     ],
     F: [
-      '/presets/f1.png','/presets/f2.png','/presets/f3.png','/presets/f4.png','/presets/f5.png'
+      '/presets/f1.svg','/presets/f2.svg','/presets/f3.svg','/presets/f4.svg','/presets/f5.svg'
     ],
     Otro: [
       '/presets/o1.png','/presets/o2.png','/presets/o3.png','/presets/o4.png','/presets/o5.png'

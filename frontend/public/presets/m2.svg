@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hombre adulto -->
+  <circle cx="32" cy="32" r="30" fill="#87CEEB" stroke="#4682B4" stroke-width="2"/>
+  <!-- Cabello negro -->
+  <path d="M18 20 Q32 10 46 20 Q42 6 32 6 Q22 6 18 20" fill="#2F2F2F"/>
+  <!-- Cara -->
+  <circle cx="32" cy="30" r="18" fill="#FDBCB4"/>
+  <!-- Ojos -->
+  <circle cx="27" cy="26" r="2" fill="#333"/>
+  <circle cx="37" cy="26" r="2" fill="#333"/>
+  <!-- Barba -->
+  <path d="M24 38 Q32 42 40 38 Q36 44 32 44 Q28 44 24 38" fill="#2F2F2F"/>
+  <!-- Nariz -->
+  <line x1="32" y1="28" x2="32" y2="32" stroke="#E07A2C" stroke-width="1"/>
+  <!-- Boca -->
+  <path d="M28 36 Q32 38 36 36" stroke="#333" stroke-width="1" fill="none"/>
+</svg>
