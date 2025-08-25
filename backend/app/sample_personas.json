@@ -1,0 +1,5 @@
+[
+  {"id":"1","nombre":"Juan","fecha_nacimiento":"1950-01-01","genero":"M","padres":[]},
+  {"id":"2","nombre":"María","fecha_nacimiento":"1952-05-10","genero":"F","padres":[]},
+  {"id":"3","nombre":"Carlos","fecha_nacimiento":"1975-03-20","genero":"M","padres":["1","2"]}
+]
