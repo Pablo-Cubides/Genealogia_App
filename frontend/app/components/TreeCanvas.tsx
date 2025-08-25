@@ -5,10 +5,13 @@ import * as d3 from 'd3'
 // Accept either hierarchical data or flat personas array
 function buildHierarchyFromList(personas: any[]){
   const map = new Map(personas.map(p=>[p.id, {...p, children: []}]))
+  const allIds = new Set(personas.map(p => p.id))
   const roots: any[] = []
+  
   for(const p of personas){
     const node = map.get(p.id)
-    const padres = p.padres || []
+    const padres = (p.padres || []).filter((padreId: string) => allIds.has(padreId)) // Solo padres que existen en el dataset
+    
     if(!padres || padres.length === 0){
       roots.push(node)
     } else {
@@ -102,6 +105,7 @@ const TreeCanvas = forwardRef(function TreeCanvas({ data, onSelect, presets }: {
     const svg = d3.create('svg')
       .attr('viewBox', [minX - 120, -80, vbWidth, Math.max(400, rootT.height * dx + 160)])
       .attr('xmlns', 'http://www.w3.org/2000/svg')
+      .attr('xmlns:xlink', 'http://www.w3.org/1999/xlink')
       .style('width', '100%')
       .style('height', 'auto')
       .attr('role','img')
@@ -125,15 +129,20 @@ const TreeCanvas = forwardRef(function TreeCanvas({ data, onSelect, presets }: {
       .attr('stroke', '#9CA3AF')
       .attr('stroke-width', 1.2)
 
-    // extra parent links (non-primary parents)
+    // extra parent links (non-primary parents) - only for existing nodes
     const extraLinks: any[] = []
+    const visibleIds = new Set(rootT.descendants().map((d:any) => d.data.id))
+    
     rootT.descendants().forEach((d:any)=>{
       const pid = d.data.id
       const padres = d.data.padres || []
       for(const p of padres){
-        const parentNode = nodeById.get(p)
-        if(parentNode && parentNode !== d.parent){
-          extraLinks.push({ source: parentNode, target: d })
+        // Only create links if both parent and child are visible in the tree
+        if(visibleIds.has(p)){
+          const parentNode = nodeById.get(p)
+          if(parentNode && parentNode !== d.parent){
+            extraLinks.push({ source: parentNode, target: d })
+          }
         }
       }
     })
@@ -158,36 +167,51 @@ const TreeCanvas = forwardRef(function TreeCanvas({ data, onSelect, presets }: {
       .join('g')
       .attr('transform', d=>`translate(${d.x},${d.y})`)
 
+    // normalize various genero values to preset keys
+    function genderKey(g?: string | null){
+      const v = (g||'').toString().trim().toLowerCase()
+      if(v === 'm' || v === 'masculino') return 'M'
+      if(v === 'f' || v === 'femenino') return 'F'
+      return 'Otro'
+    }
+
     // render avatar image if provided, otherwise circle
     node.each(function(d:any){
       const el = d3.select(this)
       // decide avatar: explicit avatar URL, otherwise preset based on genero
       let avatarUrl = d.data && d.data.avatar ? d.data.avatar : null
       if(!avatarUrl && presets){
-        const gen = d.data && d.data.genero ? d.data.genero : 'Otro'
+        const gen = genderKey(d.data && d.data.genero ? d.data.genero : null)
         const list = presets[gen] || presets['Otro'] || []
         if(list && list.length){
           // deterministic pick by id hash
           const hash = String(d.data.id).split('').reduce((acc,c)=>acc + c.charCodeAt(0), 0)
           const pick = list[hash % list.length]
-          avatarUrl = `${window.location.protocol}//${window.location.host}${pick}`
+          avatarUrl = pick // use relative path directly
         }
       }
+
+      const imgSize = 36
       if(avatarUrl){
-        // draw circular clip and image
-        const imgSize = 36
+        // create circular clip path
         const clipId = `clip-${String(d.data.id).replace(/[^a-zA-Z0-9_-]/g,'')}`
         el.append('defs').append('clipPath').attr('id', clipId).append('circle').attr('r', imgSize/2).attr('cx',0).attr('cy',0)
-        // ensure absolute URL for preset paths (they may be "/presets/..")
+        
+        // ensure absolute URL
         const absAvatar = String(avatarUrl).startsWith('http') ? String(avatarUrl) : `${window.location.protocol}//${window.location.host}${String(avatarUrl)}`
+        
+        // render image directly (no preloading)
         el.append('image')
           .attr('href', absAvatar)
+          .attr('xlink:href', absAvatar)
           .attr('x', -imgSize/2)
           .attr('y', -imgSize/2)
           .attr('width', imgSize)
           .attr('height', imgSize)
           .attr('clip-path', `url(#${clipId})`)
+          .style('cursor', 'pointer')
       } else {
+        // fallback circle
         el.append('circle').attr('r', 18).attr('fill', '#fff').attr('stroke', '#2563eb')
       }
       

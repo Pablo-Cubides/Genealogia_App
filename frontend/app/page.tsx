@@ -17,9 +17,11 @@ export default function Page(){
   const [result, setResult] = useState<{ personas: Persona[]; errores: string[] } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [editMode, setEditMode] = useState<boolean>(false)
-  const [rows, setRows] = useState<Persona[]>([{
-    id: '1', nombre: 'Persona 1', fecha_nacimiento: '', genero: '', padres: []
-  }])
+  const [rows, setRows] = useState<Persona[]>([
+    { id: '1', nombre: 'Juan Pérez', fecha_nacimiento: '1980-05-15', genero: 'M', padres: [] },
+    { id: '2', nombre: 'María García', fecha_nacimiento: '1985-08-22', genero: 'F', padres: [] },
+    { id: '3', nombre: 'Carlos Pérez', fecha_nacimiento: '2010-03-10', genero: 'M', padres: ['1', '2'] }
+  ])
   const treeRef = useRef<any>(null)
   const [selected, setSelected] = useState<Persona | null>(null)
   // runtime backend base URL (browser-accessible host:port)
@@ -176,6 +178,14 @@ export default function Page(){
     ]
   }
 
+  // Normalize various genero values to preset keys
+  function genderKey(g?: string | null){
+    const v = (g||'').toString().trim().toLowerCase()
+    if(v === 'm' || v === 'masculino') return 'M'
+    if(v === 'f' || v === 'femenino') return 'F'
+    return 'Otro'
+  }
+
   function choosePreset(url: string){
     if(!selected) return
     const idx = rows.findIndex(r=>r.id === selected.id)
@@ -280,7 +290,6 @@ export default function Page(){
                     </td>
                     <td style={{padding: 8}}>
                       <input type="date" value={row.fecha_nacimiento||''} onChange={e=>updateRow(i,'fecha_nacimiento', e.target.value)} style={{width: '100%'}} placeholder="YYYY-MM-DD" />
-                      <div style={{fontSize:12,color:'#6b7280',marginTop:4}}>También puedes escribir una fecha (ej. 31/12/1980) y el sistema la parseará.</div>
                     </td>
                     <td style={{padding: 8}}>
                       <select value={row.genero||''} onChange={e=>updateRow(i,'genero', e.target.value)} style={{width: '100%'}}>
@@ -329,7 +338,7 @@ export default function Page(){
               <div>
                 <div style={{display:'flex', gap:12, alignItems:'center'}}>
                   <div style={{width:72,height:72,borderRadius:999,overflow:'hidden',background:'#f3f4f6'}}>
-                    {selected.avatar ? <img src={selected.avatar as any} style={{width:'100%',height:'100%',objectFit:'cover'}} /> : <div style={{padding:12,color:'#9ca3af'}}>Sin foto</div>}
+                    {selected.avatar ? <img src={selected.avatar as any} onError={(e)=>{ const img=e.currentTarget as HTMLImageElement; img.onerror=null; img.src=presetAbsolute('/presets/m1.svg') }} style={{width:'100%',height:'100%',objectFit:'cover'}} /> : <div style={{padding:12,color:'#9ca3af'}}>Sin foto</div>}
                   </div>
                   <div style={{flex:1}}>
                     <div style={{fontWeight:600}}>{selected.nombre}</div>
@@ -343,8 +352,8 @@ export default function Page(){
                 <div style={{marginTop:12}}>
                   <label style={{display:'block',fontSize:12}}>O elegir avatar preestablecido</label>
                   <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:8}}>
-                    {(selected && (presetAvatars[selected.genero||'Otro'] || presetAvatars['Otro'])).map((p)=> (
-                      <img key={p} src={presetAbsolute(p)} style={{width:48,height:48,borderRadius:999,objectFit:'cover',cursor:'pointer',border:'2px solid transparent'}} onClick={()=>choosePreset(p)} onError={(e)=>{ const img = e.currentTarget as HTMLImageElement; img.onerror = null; img.src = presetAbsolute('/presets/m1.png'); console.warn('Error cargando preset', p) }} />
+                    {(selected && (presetAvatars[genderKey(selected.genero)] || presetAvatars['Otro'])).map((p)=> (
+                      <img key={p} src={presetAbsolute(p)} style={{width:48,height:48,borderRadius:999,objectFit:'cover',cursor:'pointer',border:'2px solid transparent'}} onClick={()=>choosePreset(p)} onError={(e)=>{ const img = e.currentTarget as HTMLImageElement; img.onerror = null; img.src = presetAbsolute('/presets/m1.svg'); console.warn('Error cargando preset', p) }} />
                     ))}
                   </div>
                 </div>
